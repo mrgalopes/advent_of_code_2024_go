@@ -12,6 +12,7 @@ import (
 )
 
 func main() {
+	// Part 1
 	file, err := os.Open("input.txt")
 	if err != nil {
 		log.Fatalf("error opening file: %v", err)
@@ -23,6 +24,14 @@ func main() {
 		log.Fatalf("%v\n", err)
 	}
 	fmt.Println(part1)
+
+	// Part 2
+	file.Seek(0, 0) // Go back to the start of the file
+	part2, err := Part2(file)
+	if err != nil {
+		log.Fatalf("%v\n", err)
+	}
+	fmt.Println(part2)
 }
 
 func Part1(r io.Reader) (int, error) {
@@ -64,4 +73,42 @@ func Part1(r io.Reader) (int, error) {
 	}
 
 	return difference, nil
+}
+
+func Part2(r io.Reader) (int, error) {
+	lefts := []int{}
+	rights := make(map[int]int)
+
+	scanner := bufio.NewScanner(r)
+	for scanner.Scan() {
+		text := scanner.Text()
+		numbers := strings.Split(text, "   ")
+		left, err := strconv.ParseInt(numbers[0], 10, 32)
+		if err != nil {
+			fmt.Printf("failed to parse left number: %v\n", err)
+			continue
+		}
+		lefts = append(lefts, int(left))
+
+		right, err := strconv.ParseInt(numbers[1], 10, 32)
+		if err != nil {
+			fmt.Printf("failed to parse right number: %v\n", err)
+			continue
+		}
+		rights[int(right)] += 1
+	}
+	if err := scanner.Err(); err != nil {
+		return 0, fmt.Errorf("error in scanner: %w", err)
+	}
+
+	score := 0
+	for _, left := range lefts {
+		similarity, present := rights[left]
+		if !present {
+			continue
+		}
+		score += left * similarity
+	}
+
+	return score, nil
 }
