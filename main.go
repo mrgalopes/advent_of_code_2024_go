@@ -35,21 +35,21 @@ func main() {
 }
 
 func Part1(r io.Reader) (int, error) {
-	lefts := []int64{}
-	rights := []int64{}
+	lefts := []int{}
+	rights := []int{}
 
 	scanner := bufio.NewScanner(r)
 	for scanner.Scan() {
 		text := scanner.Text()
 		numbers := strings.Split(text, "   ")
-		left, err := strconv.ParseInt(numbers[0], 10, 32)
+		left, err := strconv.Atoi(numbers[0])
 		if err != nil {
 			fmt.Printf("failed to parse left number: %v\n", err)
 			continue
 		}
 		lefts = append(lefts, left)
 
-		right, err := strconv.ParseInt(numbers[1], 10, 32)
+		right, err := strconv.Atoi(numbers[1])
 		if err != nil {
 			fmt.Printf("failed to parse right number: %v\n", err)
 			continue
@@ -69,7 +69,7 @@ func Part1(r io.Reader) (int, error) {
 
 	difference := 0
 	for i := range lefts {
-		difference += int(max((lefts[i] - rights[i]), (rights[i] - lefts[i])))
+		difference += max((lefts[i] - rights[i]), (rights[i] - lefts[i]))
 	}
 
 	return difference, nil
@@ -83,19 +83,19 @@ func Part2(r io.Reader) (int, error) {
 	for scanner.Scan() {
 		text := scanner.Text()
 		numbers := strings.Split(text, "   ")
-		left, err := strconv.ParseInt(numbers[0], 10, 32)
+		left, err := strconv.Atoi(numbers[0])
 		if err != nil {
 			fmt.Printf("failed to parse left number: %v\n", err)
 			continue
 		}
-		lefts = append(lefts, int(left))
+		lefts = append(lefts, left)
 
-		right, err := strconv.ParseInt(numbers[1], 10, 32)
+		right, err := strconv.Atoi(numbers[1])
 		if err != nil {
 			fmt.Printf("failed to parse right number: %v\n", err)
 			continue
 		}
-		rights[int(right)] += 1
+		rights[right] += 1
 	}
 	if err := scanner.Err(); err != nil {
 		return 0, fmt.Errorf("error in scanner: %w", err)
