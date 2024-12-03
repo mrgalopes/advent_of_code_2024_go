@@ -38,12 +38,15 @@ func TestCountSafeReports(t *testing.T) {
 8 6 4 4 1
 1 3 6 7 9`
 
-	count, err := CountSafeReports(strings.NewReader(input))
+	count, countWithDampener, err := CountSafeReports(strings.NewReader(input))
 	if err != nil {
 		t.Fatalf("wanted err nil, got %v", err)
 	}
 	if count != 2 {
 		t.Fatalf("wanted 2 safe reports, got %d", count)
+	}
+	if countWithDampener != 4 {
+		t.Fatalf("wanted 4 safe reports with dampener, got %d", count)
 	}
 }
 
