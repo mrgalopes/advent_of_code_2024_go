@@ -7,3 +7,5 @@ use ./day02
 use ./day03
 
 use ./day04
+
+use ./day05
